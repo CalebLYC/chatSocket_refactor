@@ -34,25 +34,24 @@ body{
     flex-direction: column;
     justify-content: space-between;
 }
-.chat{
+main{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
-    margin-top: 25px;
-    width: 100%;
+    padding: 5px;
 }
-.chat #users{
+main #users{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     width: 15%;
-    max-height: 70vh;
-    position: absolute;
+    max-height: 90vh;
     margin: 0;
     padding: 10px;
     border: solid 1px blue;
     background-color: #CCC;
+    overflow-y: scroll;
 }
 #users li{
     list-style: none;
@@ -66,14 +65,23 @@ body{
     word-wrap: break-word;
 }
 
+.chat{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 25px;
+    width: 100%;
+}
+
 .send{
     position: fixed;
     width: 100%;
     bottom: 0;
     margin: 25px;
+    margin-bottom: 0;
 }
 .send input{
-    width: 70%;
+    width: 60%;
     height: 20px;
 }
 .send button{
@@ -88,8 +96,7 @@ body{
     align-items: flex-start;
     width: 70%;
     position: absolute;
-    margin: 0;
-    margin-left: 20%;
+    margin: 5px;
     padding: 0;
 }
 #messages li{
@@ -131,4 +138,10 @@ body{
 }
 .error{
     color: red;
+}
+.userIcon{
+    width: 30px;
+    height: 20px;
+    object-fit: cover;
+    margin: 10px;
 }

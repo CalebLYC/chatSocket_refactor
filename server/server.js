@@ -20,7 +20,7 @@ app.use(function(req, res, next){
     next();
 });
 
-var connectedUsers = [];
+exports.connectedUsers = [];
 var Connecteduser;
 
 const eventHandlers = require('./events/eventHandlers');
@@ -35,9 +35,10 @@ user.createUserTable();
 
 
 io.on('connection', function(socket){
-    socket.on('new user', (username) => eventHandlers.newUserHandler(socket, username));
-    socket.on('user disconnect', (username)=>eventHandlers.userDisconnectHandler(socket, username));
+    socket.on('new user', (username) => eventHandlers.newUserHandler(socket, io, username));
+    socket.on('user disconnect', (user)=>eventHandlers.userDisconnectHandler(socket, io, user));
     socket.on('chat message', (msg) => eventHandlers.chatMessageHandler(io, msg));
+    socket.on('users', () => eventHandlers.usersHandler(io));
 })
 
 http.listen(3000, function(){
