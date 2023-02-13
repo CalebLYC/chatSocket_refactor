@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>socket.io chat</title>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/chat.js"></script>
+
+    <div class="disconnect">
+        <button onclick="disconnect()">Déconnexion</button>
+    </div>
+
+    <div class="chat">
+        <ul id="users">
+            <h3>Utilisateurs connectés</h3>
+        </ul>
+        <ul id="messages"></ul>
+        <div class="send">
+            <input type="text" id="m"/>
+            <button onclick="send()">Send</button>
+        </div>
+    </div>
+</body>
+</html>

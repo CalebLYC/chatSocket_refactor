@@ -1,0 +1,134 @@
+/*********************Acceuil**********************/
+.home{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.connect{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.home input{
+    width: 200px;
+    margin: 20px;
+}
+.home button{
+    min-width: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
+    margin-bottom: 15px;
+}
+.home button:hover{
+    transform: scale(1.05);
+    transition: .3s;
+}
+
+/*********************Chat****************************/
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.chat{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 25px;
+    width: 100%;
+}
+.chat #users{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 15%;
+    max-height: 70vh;
+    position: absolute;
+    margin: 0;
+    padding: 10px;
+    border: solid 1px blue;
+    background-color: #CCC;
+}
+#users li{
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    min-height: 5px;
+    color: blue;
+    padding: 10px;
+    font-size: 14pt;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.send{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    margin: 25px;
+}
+.send input{
+    width: 70%;
+    height: 20px;
+}
+.send button{
+    min-width: 10%;
+    padding: 15px;
+    border-radius: 10px;
+}
+#messages{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 70%;
+    position: absolute;
+    margin: 0;
+    margin-left: 20%;
+    padding: 0;
+}
+#messages li{
+    list-style: none;
+    width: 100%;
+    margin: 5px 0 5px 0;
+    border-radius: 5px;
+    min-height: 5px;
+    background-color: #AAA;
+    color: aquamarine;
+    padding: 10px;
+}
+#messages li:nth-child(even){
+    background-color: #CCC;
+    color: blue;
+    /*text-align: end;*/
+}
+
+.disconnect{
+    margin: 20px;
+}
+.disconnect button{
+    position: absolute;
+    right: 5px;
+    padding: 5px;
+    cursor: pointer;
+    transition: .2s;
+}
+.disconnect button:hover{
+    transform: scale(1.01);
+    transition: .2s;
+}
+
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+.error{
+    color: red;
+}

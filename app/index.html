@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>socket.io chat</title>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="assets/js/index.js"></script>
+
+    <div class="home">
+        <h2>Bienvenue dans chat</h2>
+        <p>Veuillez vous connecter</p>
+            <input type="text" name="username" id="username" placeholder="Nom d'utilisateur"/>
+            <div class="error"></div>
+            <button onclick="connect()">Se connecter</button>
+            <div>       Pas de compte?    <a href="/signin">s'inscrire</a></div>
+    </div>
+</body>
+</html>
