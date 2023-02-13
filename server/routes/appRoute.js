@@ -1,6 +1,7 @@
 var express = require('express');
 const router = express.Router();
 const path = require('path');
+const getUser = require('../models/user').getUser;
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'..', '..', 'app', 'index.html'));
@@ -8,6 +9,14 @@ router.get('/', (req, res) => {
 
 router.get('/chat', (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', 'app', 'chat.html'));
+    const id = req.query.id;
+    /*getUser(id)
+        .then(user => {
+            return res.status(200).json({success: true, user});
+        })
+        .catch(err => {
+            return res.status(500).json({sucess: false, message: err.message})
+        })*/
 })
 
 router.get('/register', (req, res) => {

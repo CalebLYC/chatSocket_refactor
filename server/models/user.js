@@ -53,6 +53,19 @@ const addUser = (user) => {
     })
 }
 
+//obtenir un utilisateur spécifique
+const getUser = (id) => {
+    return new Promise((resolve, reject)=>{
+        const sql = 'SELECT * FROM users where id = ?';
+        db.get(sql, [id], (err, user)=>{
+            if(err){
+                reject(err);
+            }
+            resolve(user);
+        })
+    })
+}
+
 //Vérifier si un utilisateur(au quel cas retourner cet utilisateur) ou pas
 const userExists = (username) => {
     return new Promise((resolve, reject)=>{
@@ -96,6 +109,7 @@ module.exports = {
     getUsers,
     createUserTable,
     addUser,
+    getUser,
     userExists,
     deleteUser,
     updateUser,

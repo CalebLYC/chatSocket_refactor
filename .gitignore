@@ -20,6 +20,7 @@ build/
 
 # SQLite database file
 *.sqlite
+.mydb.db
 server/mydb.db
 
 # Temporary files

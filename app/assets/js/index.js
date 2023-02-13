@@ -16,7 +16,7 @@ var connect = function(){
     .then(data => {
         console.log(data)
         if(data.success){
-            socket.emit('new user', data.user.username)
+            socket.emit('new user', data.user)
         }else{
             document.querySelector('.error').textContent = 'Identifiant invalide'
         }
