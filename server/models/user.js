@@ -1,7 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
 
-const db = require('./db');
+const db = require('./db');//Connexion à la base de données(qui gère la fermeture de cete database)
 
+//Création de la table users
 const createUserTable = () => {
     return new Promise((resolve, reject)=>{
         const sql = `
@@ -20,9 +21,10 @@ const createUserTable = () => {
     })
 }
 
+//Obtenir tous les utilisateurs
 const getUsers = () => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM USERS", (err, users) => {
+        db.all("SELECT * FROM users", (err, users) => {
             if(err){
                 reject(err)
             }
@@ -31,6 +33,7 @@ const getUsers = () => {
     })
 }
 
+//AJout d'un utilisateur après vérification
 const addUser = (user) => {
     return new Promise((resolve, reject) => {
         const sql = 'INSERT INTO users(id, username, password) VALUES(?, ?, ?)';
@@ -50,6 +53,7 @@ const addUser = (user) => {
     })
 }
 
+//Vérifier si un utilisateur(au quel cas retourner cet utilisateur) ou pas
 const userExists = (username) => {
     return new Promise((resolve, reject)=>{
         const sql = 'SELECT * FROM users where username = ?';
@@ -62,9 +66,37 @@ const userExists = (username) => {
     })
 }
 
+//Suppression d'un utilisateur
+const deleteUser = (id) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'DELETE FROM users where id = ?';
+        db.run(sql, id, (err) => {
+            if(err){
+                reject(err);
+            }
+            resolve();
+        })
+    })
+}
+
+//Mise à jour d'un utilisateur
+const updateUser = ({user}) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE users SET username =?, password = ? WHERE id=?';
+        db.run(sql, [user.username, user.password, user.id], (err) => {
+            if(err){
+                reject(err);
+            }
+            resolve();
+        })
+    })
+}
+
 module.exports = {
     getUsers,
     createUserTable,
     addUser,
     userExists,
+    deleteUser,
+    updateUser,
 }

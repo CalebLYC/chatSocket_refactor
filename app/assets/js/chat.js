@@ -4,8 +4,9 @@ socket.on('new user', (data)=>{
     alert(data.message + "\nFaites coucou à " + data.username)
 })
 
-socket.on('user disconnect', (username)=>{
-    alert(data.message + "\nDites au revoir à " + username);
+socket.on('user disconnect', ()=>{
+    //alert(data.message + "\nDites au revoir à " + data.username);
+    alert("Un utilisateur s'est déconnecté\nDites au revoir à " );
 })
 
 socket.on('disconnect redirect', (url)=>{

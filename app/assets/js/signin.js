@@ -12,7 +12,7 @@ var signin = ()=>{
         document.querySelector('.error').textContent = "Les mots de passe ne sont pas confomes";
         return;
     }
-    fetch('/signin', {
+    fetch('/register', {
         method: 'post',
         headers: {
             'content-type': 'application/json'

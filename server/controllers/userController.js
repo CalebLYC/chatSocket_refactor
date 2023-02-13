@@ -1,3 +1,17 @@
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+app.use(cookieParser())
+
 const userModel = require('../models/user');
 
 exports.getUsers = (req, res) => {
@@ -15,13 +29,13 @@ exports.createUser = (req, res) => {
     if(password === passwordConfirm){
         userModel.addUser({username, password})
             .then(user => {
-                res.status(200).json({success: true}, user);
+                res.status(200).json({success: true, user});
             })
             .catch(err => {
                 res.status(500).json({success: false, message: err.message});
             })
     }else{
-        res.status(200).json({success: false, messqge: "Les mots de passe ne correspondent pas"});
+        res.status(500).json({success: false, message: "Les mots de passe ne correspondent pas"});
     }
 }
 
@@ -30,6 +44,7 @@ exports.login = (req, res) => {
     userModel.userExists(username)
         .then(data => {
             if(data.exists){
+                res.cookie('username', username);
                 res.status(200).json({success: true, user: data.user});
             }else{
                 res.status(500).json({success: false, message: 'Identifiant invalide'});
@@ -40,32 +55,25 @@ exports.login = (req, res) => {
         })
 }
 
-/*
-// update a user
 exports.updateUser = (req, res) => {
-    const { username, email } = req.body;
+    const { username, password } = req.body;
     const { id } = req.params;
-    db.run(
-      "UPDATE USERS SET username = ?, email = ? WHERE id = ?",
-      [username, email, id],
-      function (err) {
-        if (err) {
-          return res.status(500).json({ success: false, message: err.message });
-        }
-        return res
-          .status(200)
-          .json({ success: true, message: `User ${id} updated.` });
-      }
-    );
-  };
+    userModel.updateUser({id, username, password})
+        .then(()=>{
+            return res.status(200).json({ success: true, message: `Utilisateur ${id} mis à jour.` });
+        })
+        .catch((err)=>{
+            return res.status(500).json({ success: false, message: err.message });
+        })
+};
   
-  // delete a user
   exports.deleteUser = (req, res) => {
     const { id } = req.params;
-    db.run("DELETE FROM USERS WHERE id = ?", [id], function (err) {
-      if (err) {
-        return res.status(500).json({ success: false, message: err.message });
-      }
-      return res.status(200).json({ success: true, message: `User ${id} deleted.` });
-    });
-  };*/
+    userModel.deleteUser(id)
+        .then(()=>{
+            return res.status(200).json({ success: true, message: `Utilisateur ${id} supprimé.` });
+        })
+        .catch((err)=>{
+            return res.status(500).json({ success: false, message: err.message });
+        })
+  };
