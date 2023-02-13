@@ -20,6 +20,7 @@ build/
 
 # SQLite database file
 *.sqlite
+server/mydb.db
 
 # Temporary files
 .DS_Store
