@@ -2,6 +2,10 @@ var socket = io();
 
 let user;
 
+window.onload = ()=>{
+   document.querySelector('.send').scrollIntoView(true);
+}
+
 socket.on('new user', (data)=>{
     alert(data.message + "\nFaites coucou à " + data.user.username)
 })
@@ -25,8 +29,19 @@ socket.on('users', (users)=>{
 
 var send = function(){
     var msg = document.getElementById('m').value;
-    socket.emit('chat message', msg);
-    document.getElementById('m').value ='';
+    fetch('/chat/send',{
+        method: 'post',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({content:msg, user_id:user.id})
+    }).then(response=>response.json())
+    .then(data=>{
+        if(data.success){
+            socket.emit('chat message', data.message);
+            document.getElementById('m').value ='';
+        }
+    })
 }
 
 var disconnect = ()=>{
@@ -52,10 +67,8 @@ var disconnect = ()=>{
     }
 }
 
-socket.on('chat message', (msg)=>{
-    var li = document.createElement('li');
-    li.innerText = msg;
-    document.getElementById('messages').appendChild(li);
+socket.on('chat message', (messages)=>{
+    printMessages(messages);
 })
 
 const urlParms = new URLSearchParams(window.location.search);
@@ -67,8 +80,26 @@ fetch(`/user?id=${id}`)
         if(data.success){
             user = data.user;
             socket.emit('users', data.user);
+            fetch(`/chat/get`)
+                .then(res => res.json())
+                .then(data=>{
+        if(data.success){
+            printMessages(data.messages);
+        }
+    })
         }else{
             console.error(data.message);
         }
     })
     .catch(err => console.error(err));
+
+
+function printMessages(messages){
+    document.getElementById('messages').innerHTML = '';
+    messages.forEach(message => {
+        var li = document.createElement('li');
+        li.className = message.user_id==user.id ? 'myMessage' : 'otherMessage';
+        li.innerText = message.content;
+        document.getElementById('messages').appendChild(li);
+    });
+}

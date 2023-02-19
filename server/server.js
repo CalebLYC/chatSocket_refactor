@@ -26,12 +26,17 @@ var Connecteduser;
 const eventHandlers = require('./events/eventHandlers');
 const appRoutes = require('./routes/appRoute');
 const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 app.use(appRoutes);
 app.use(userRoutes);
+app.use('/chat', chatRoutes);
 
 const user = require('./models/user');
+const chat= require('./models/chat');
 user.createUserTable();
+chat.createChatTable();
+
 
 
 io.on('connection', function(socket){

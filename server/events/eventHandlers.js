@@ -28,8 +28,10 @@ const userDisconnectHandler = (socket, io, user) => {
 }
 
 //Evènement d'envoi d'un message
-const chatMessageHandler = (io, msg) => {
-    io.emit('chat message', msg);
+const chatMessageHandler = (io, message) => {
+    require('../models/chat').getMessages().then(messages => {
+        io.emit('chat message', messages);
+    })
 }
 
 const usersHandler = (io) => {
