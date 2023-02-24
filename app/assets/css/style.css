@@ -79,16 +79,16 @@ main #users{
 
 .send{
     max-width: 100%;
-    min-width: 75%;
+    min-width: 95%;
     margin: 25px;
     bottom: 2px;
     padding: 10px;
     margin-bottom: 0;
     display: flex;
 }
-.send input{
+.send textarea{
     width: 100%;
-    height: 20px;
+    height: 30px;
     margin: 10px;
 }
 .send button{
@@ -143,6 +143,49 @@ main #users{
     transform: scale(1.01);
     transition: .2s;
 }
+.disconnect a{
+    position: absolute;
+    right: 5px;
+    transform: translateY(25px);
+    padding: 5px;
+    text-decoration: none;
+    color: blue;
+    cursor: pointer;
+}
+
+/********************************Chats************************/
+.chats{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.chats li{
+    list-style: none;
+    margin: 15px;
+    padding: 5px;
+    height: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.chats li button{
+    padding: 10px;
+    background-color: red;
+    margin: 15px;
+    cursor: pointer;
+    transform: translateY(-20px);
+    transition: .3s;
+}
+
+.chats li button:hover{
+    transform: translateY(-20px);
+    transform: scale(1.05);
+    transition: .3s;
+}
+
 
 .hide{
     display: none;

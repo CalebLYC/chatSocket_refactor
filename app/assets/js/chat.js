@@ -1,30 +1,40 @@
 var socket = io();
 
-let user;
+/*define(function() {
+    return { user: null };
+  });*/
+ let user; 
+let chat;
 
 window.onload = ()=>{
    document.querySelector('.send').scrollIntoView(true);
 }
 
 socket.on('new user', (data)=>{
-    alert(data.message + "\nFaites coucou à " + data.user.username)
+    if(data.user.chat.chat_id === user.chat_id){
+        alert(data.message + "\nFaites coucou à " + data.user.userInfos.username);
+    }
 })
 
 socket.on('user disconnect', (data)=>{
-    alert(data.message + "\nDites au revoir à " + data.user.username);
+    if(data.user.chat_id === user.chat_id){
+        alert(data.message + "\nDites au revoir à " + data.user.username);
+    }
 })
 
 socket.on('disconnect redirect', (url)=>{
     window.location.href = url;
 })
 
-socket.on('users', (users)=>{
-    document.getElementById('users').innerHTML = '';
-    users.forEach(user => {
-        var li = document.createElement('li');
-        li.innerHTML =`<img src= './assets/img/userIcon.jpeg' class='userIcon' width='50' height='25' alt='userIcon' />  <span>${user.username}</span>`;
-        document.getElementById('users').appendChild(li);
-    });
+socket.on('users', (data)=>{
+    if(data.id === user.chat_id){
+        document.getElementById('users').innerHTML = '';
+        data.users.forEach(user => {
+            var li = document.createElement('li');
+            li.innerHTML =`<img src= './assets/img/userIcon.jpeg' class='userIcon' width='50' height='25' alt='userIcon' />  <span>${user.username}</span>`;
+            document.getElementById('users').appendChild(li);
+        });
+    } 
 })
 
 var send = function(){
@@ -34,11 +44,11 @@ var send = function(){
         headers: {
             'content-type': 'application/json'
         },
-        body: JSON.stringify({content:msg, user_id:user.id})
+        body: JSON.stringify({content:msg, user_id:user.user_id, chat:user.chat_id})
     }).then(response=>response.json())
     .then(data=>{
         if(data.success){
-            socket.emit('chat message', data.message);
+            socket.emit('chat message', {message: data.message, chat: user.chat_id});
             document.getElementById('m').value ='';
         }
     })
@@ -61,7 +71,6 @@ var disconnect = ()=>{
             }
         }) 
         .catch(err => {
-            console.error(err);
             alert('Erreur lors de la déconnexion')
         })   
     }
@@ -80,7 +89,7 @@ fetch(`/user?id=${id}`)
         if(data.success){
             user = data.user;
             socket.emit('users', data.user);
-            fetch(`/chat/get`)
+            fetch(`/chat/get?chat=${user.chat_id}`)
                 .then(res => res.json())
                 .then(data=>{
         if(data.success){
@@ -98,8 +107,12 @@ function printMessages(messages){
     document.getElementById('messages').innerHTML = '';
     messages.forEach(message => {
         var li = document.createElement('li');
-        li.className = message.user_id==user.id ? 'myMessage' : 'otherMessage';
+        li.className = message.user_id==user.user_id ? 'myMessage' : 'otherMessage';
         li.innerText = message.content;
         document.getElementById('messages').appendChild(li);
     });
+}
+
+function getChats(){
+    window.location.href = `/chats?id=${user.user_id}`
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inscription socket.io</title>
+    <link rel="stylesheet" href="/chat/assets/css/style.css" type="text/css"/>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/chat/assets/js/createChat.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>-->
+
+    <div class="home">
+        <h2>Créer votre chat</h2>
+            <input type="text" name="chatname" id="chatname" placeholder="Nom du chat"/>
+            <input type="password" name="password" id="password" placeholder="Mot de passe"/>
+            <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Confirmer le mot de passe"/>
+            <div class="error"></div>
+            <button onclick="create()">Créer le chat</button>
+            <div>       Déja inscrit?    <a href="/login">se connecter</a>   ou<a href="/">Rejoindre un chat</a></div>
+    </div>
+</body>
+</html>

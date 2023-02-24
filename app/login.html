@@ -9,17 +9,14 @@
 </head>
 <body>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="assets/js/index.js"></script>
+    <script src="assets/js/login.js"></script>
 
     <div class="home">
-        <h1>Bienvenue dans chat</h1>
-        <a href="/chat/create">Créer un chat</a>
-        <p>Ou</p>
-        <h2>Se connecter à un chat</h2>
+        <h1>Connexion</h1>
             <input type="text" name="username" id="username" placeholder="Nom d'utilisateur"/>
-            <input type="text" name="chatId" id="chatId" placeholder="Identifiant du chat"/>
+            <input type="text" name="password" id="password" placeholder="Mot de passe"/>
             <div class="error"></div>
-            <button onclick="connect()">Se connecter</button>
+            <button onclick="login()">Se connecter</button>
             <div>       Pas de compte?    <a href="/register">s'inscrire</a></div>
     </div>
 </body>

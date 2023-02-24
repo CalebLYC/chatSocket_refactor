@@ -1,10 +1,10 @@
 const db = require('./db');
 const {v4: uuid} = require('uuid');
 
-const createChatTable = ()=>{
+const createChatTable = (name)=>{
     return new Promise((resolve, reject)=>{
         const sql = `
-            CREATE TABLE IF NOT EXISTS chat(
+            CREATE TABLE IF NOT EXISTS ${name}(
                 id INTEGER PRIMARY KEY,
                 content TEXT,
                 user_id INTEGER,
@@ -20,9 +20,9 @@ const createChatTable = ()=>{
     });
 }
 
-const getMessages = ()=>{
+const getMessages = (chat)=>{
     return new Promise((resolve, reject)=>{
-        db.all('SELECT * FROM chat', (err, messages)=>{
+        db.all(`SELECT * FROM ${chat}`, (err, messages)=>{
             if(err){
                 reject(err);
             }
@@ -34,8 +34,9 @@ const getMessages = ()=>{
 const addMessage = (message)=>{
     let content = message.content;
     let user_id = message.user_id;
+    let chat = message.chat;
     return new Promise((resolve, reject)=>{
-        db.run('INSERT INTO chat(content, user_id) VALUES(?,?)', [content, user_id], (err)=>{
+        db.run(`INSERT INTO ${chat}(content, user_id) VALUES(?,?)`, [content, user_id], (err)=>{
             if(err){
                 reject(err);
             }

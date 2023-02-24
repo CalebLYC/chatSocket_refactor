@@ -13,6 +13,8 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 
 const userModel = require('../models/user');
+const chatsTableModel = require('../models/chatsTable');
+const connectedUserModel = require('../models/connectedUser');
 
 exports.getUsers = (req, res) => {
     userModel.getUsers()
@@ -39,13 +41,42 @@ exports.createUser = (req, res) => {
     }
 }
 
-exports.login = (req, res) => {
-    const username = req.body.username;
+exports.connect = (req, res) => {
+    const {username, chatId} = req.body;
     userModel.userExists(username)
         .then(data => {
             if(data.exists){
-                res.cookie('username', username);
-                res.status(200).json({success: true, user: data.user});
+                chatsTableModel.getChat(chatId)
+                    .then((response)=>{
+                        if(response.exists){
+                            user = {
+                                userInfos: data.user,
+                                chat: response.chat
+                            }
+                            res.cookie('username', username);
+                            res.status(200).json({success: true, user});
+                        }
+                    }).catch(err=>{
+                        console.log(err.message);
+                    })
+            }else{
+                res.status(500).json({success: false, message: 'Identifiant invalide'});
+            }
+        })
+        .catch(err => {
+            res.status(500).json({success: false, message: err.message});
+        })
+}
+
+exports.login = (req, res) => {
+    const {username, password} = req.body;
+    userModel.userExists(username)
+        .then(data => {
+            if(data.exists){
+                if(data.user.password === password){
+                    res.cookie('user', data.user);
+                    res.status(200).json({success: true, user:data.user});
+                }
             }else{
                 res.status(500).json({success: false, message: 'Identifiant invalide'});
             }
@@ -77,3 +108,16 @@ exports.updateUser = (req, res) => {
             return res.status(500).json({ success: false, message: err.message });
         })
   };
+
+  exports.logout = (req, res)=>{
+    if(!req.body || !req.body.user){
+        return res.status(400).json({success: false, message: "Cette session utilisateur est inavlide"})
+    }
+    var user = req.body.user;
+    connectedUserModel.deleteConnectedUser(user.user_id)
+        .then(()=>{
+            res.status(200).json({success: true, user});
+        }).catch(err=>{
+            res.status(500).json({success: false, message:err.message});
+        })
+}

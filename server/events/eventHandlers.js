@@ -2,40 +2,54 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 
-let connectedUsers = require('../server').connectedUsers;
-
-//Evènement d'envoi de connexion d'un nouvel utilisateur
+let connectedUserModel = require('../models/connectedUser');
+ 
 const newUserHandler = (socket, io, user) => {
-    userExist = false;
-    connectedUsers.forEach(connUser => {
-        if(connUser.id === user.id){
-            userExist = true;
-        }
-    });
-    !userExist && connectedUsers.push(user);
-    socket.emit('redirect', `/chat?id=${user.id}`);
-    socket.broadcast.emit('new user', {message: "Nouvel utilisateur connecté", user});
-    /*io.emit('users', connectedUsers);
-    socket.emit('users', connectedUsers);*/
+    connectedUserModel.addConnectedUser({user_id: user.userInfos.id, username: user.userInfos.username, chat_id:user.chat.chat_id})
+        .then(()=>{
+            connectedUserModel.getConnectedUsers(user.chat.chat_id)
+                .then(users=>{
+                    socket.emit('redirect', `/chat?id=${user.userInfos.id}`);
+                    socket.broadcast.emit('new user', {message: "Nouvel utilisateur connecté", user});
+                    socket.emit('connected', user);
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+        })
+        .catch(err=>{
+            console.log(err);
+        })
 }
+
+const userLogin = (socket, user) => {
+    socket.emit('user login', user);
+}
+
 
 //Evènement de déconnexion d'un utilisateur
 const userDisconnectHandler = (socket, io, user) => {
-    connectedUsers = connectedUsers.filter(connectedUser => connectedUser.id !== user.id);
-    socket.emit('disconnect redirect', '/')
-    io.emit('users', connectedUsers);
-    socket.broadcast.emit('user disconnect', {message: "Un utilisateur s'est déconnecté", user});
+    connectedUserModel.getConnectedUsers(user.chat_id)
+        .then(users=>{
+            socket.emit('disconnect redirect', '/')
+            io.emit('users', {id:user.chat_id, users});
+            socket.broadcast.emit('user disconnect', {message: "Un utilisateur s'est déconnecté", user});
+        })
 }
 
 //Evènement d'envoi d'un message
-const chatMessageHandler = (io, message) => {
-    require('../models/chat').getMessages().then(messages => {
+const chatMessageHandler = (io, data) => {
+    const chat = data.chat;
+    require('../models/chat').getMessages(chat).then(messages => {
         io.emit('chat message', messages);
     })
 }
 
-const usersHandler = (io) => {
-    io.emit('users', connectedUsers);
+const usersHandler = (io, user) => {
+    connectedUserModel.getConnectedUsers(user.chat_id)
+        .then(users=>{
+            io.emit('users', {id:user.chat_id, users:users});
+        }).catch(err=>console.error(err))
 }
 
 module.exports = {
@@ -43,4 +57,5 @@ module.exports = {
     userDisconnectHandler,
     chatMessageHandler,
     usersHandler,
+    userLogin,
 }

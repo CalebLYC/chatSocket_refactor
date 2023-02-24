@@ -20,12 +20,13 @@
         <div>
             <div class="disconnect">
                 <button onclick="disconnect()">Déconnexion</button>
+                <a onclick="getChats()">Voir tous les chats en cours</a>
             </div>
         
             <div class="chat">
                 <ul id="messages"></ul>
                 <div class="send">
-                    <input type="text" id="m" placeholder="Message"/>
+                    <textarea id="m" placeholder="Message"></textarea>
                     <button onclick="send()">Send</button>
                 </div>
             </div>
